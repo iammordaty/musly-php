@@ -1,0 +1,27 @@
+Music Similarity Library (Musly) - http://www.musly.org
+Version: 0.2
+(c) 2013-2014, Dominik Schnitzer <dominik@schnitzer.at>
+    2014-2016, Jan Schlüter <jan.schlueter@ofai.at>
+
+Initialized music similarity method: timbre
+~~~
+A timbre only music similarity measure based 'mandelellis'. It
+improves the basic measure in multiple ways to achieve superior
+results:
+We compute a single Gaussian representation from the songs
+using 25 MFCCs. The similarity between two tracks is computed
+with the Jensen-Shannon divergence. The Similarities are
+normalized with Mutual Proximity:
+D. Schnitzer et al.: Using mutual proximity to improve
+content-based audio similarity. In the proceedings of the 12th
+International Society for Music Information Retrieval
+Conference, ISMIR, 2011.
+~~~
+Installed audio decoder: libav
+Reading collection file: collection.musly
+Loaded 5 musly tracks to memory.
+Initializing jukebox...
+Computing the k=5 most similar tracks to: /Audio/Sample/Dero feat. Mr. X - Supertango [Play The Bandoneon Mix].mp3
+track-id: 1, track-similarity: 0.0153444, track-origin: /Audio/Sample/Armand Van Helden - Into Your Eyes [Original Club Mix].mp3
+track-id: 2, track-similarity: 0.0159516, track-origin: /Audio/Sample/Hardy Hard - Tellievision [Non Vocal Mix].mp3
+track-id: 3, track-similarity: 0.0160871, track-origin: /Audio/Sample/Lovestern Galaktika Project meets Pulsedriver & Ole Van Dansk - Move For Freedom [Club Mix].mp3

@@ -1,0 +1,32 @@
+{
+    "name": "iammordaty/musly-php",
+    "description": "PHP wrapper around the `musly` command",
+    "keywords": [ "musly", "music-similarity", "library", "wrapper", "php" ],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "iammordaty",
+            "email": "iammordaty@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "php": "~7.1",
+        "symfony/process": "^4.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7",
+        "phpstan/phpstan": "^0.10.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Musly\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Musly\\Tests\\Unit\\": "tests/unit",
+            "Musly\\Tests\\Integration\\": "tests/integration"
+        }
+    }
+}
