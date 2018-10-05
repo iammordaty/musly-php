@@ -54,7 +54,7 @@ class Collection extends \SplFileInfo
      */
     public function __construct($params = [])
     {
-        $this->noramlizeParams($params);
+        $this->normalizeParams($params);
 
         parent::__construct($params['pathname']);
 
@@ -126,7 +126,7 @@ class Collection extends \SplFileInfo
     /**
      * @param string|array $params
      */
-    private function noramlizeParams(&$params)
+    private function normalizeParams(&$params)
     {
         if (is_string($params)) {
             $params = [ 'pathname' => $params ];
