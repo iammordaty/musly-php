@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit 
+<phpunit
     backupGlobals="false"
     backupStaticAttributes="false"
     beStrictAboutCoversAnnotation="true"
@@ -15,7 +15,8 @@
     verbose="true"
 >
     <php>
-       <env name="MUSLY_BINARY" value="" />
+        <ini name="error_reporting" value="E_ALL" />
+        <env name="musly_binary" value="" />
     </php>
 
     <testsuites>
