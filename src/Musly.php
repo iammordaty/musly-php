@@ -261,7 +261,7 @@ class Musly
      */
     protected function runProcess($commandline)
     {
-        $process = new Process($commandline);
+        $process = Process::fromShellCommandline($commandline);
         $process->mustRun();
 
         return $process;
@@ -315,7 +315,7 @@ class Musly
         foreach (explode(PHP_EOL, $tracklist) as $line) {
             if ($hasAttrs && preg_match_all('/([^:]+):\s([^,]*)(?:,\s)?/', $line, $matches)) {
                 $tracks[] = array_combine($matches[1], $matches[2]);
-                
+
                 continue;
             }
 
