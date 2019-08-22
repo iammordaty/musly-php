@@ -26,9 +26,9 @@ class CollectionTest extends TestCase
 
     public function dataCreateSuccess()
     {
-        $pathname = uniqid('/path/to/collection');
+        $pathname = uniqid('/path/to/collection', true);
         $defaultJukeboxPathname = $pathname . '.jbox';
-        $jukeboxPathname = uniqid('/path/to/jukebox');
+        $jukeboxPathname = uniqid('/path/to/jukebox', true);
 
         return [
             'create with default params' => [
@@ -101,7 +101,7 @@ class CollectionTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $invalidSimilarityMethod = uniqid('this-is-invalid-similarity-method');
+        $invalidSimilarityMethod = uniqid('this-is-invalid-similarity-method', true);
 
         new Collection([ 'similarityMethod' => $invalidSimilarityMethod ]);
     }
@@ -127,7 +127,7 @@ class CollectionTest extends TestCase
 
     public function dataConfigureSuccess()
     {
-        $jukeboxPathname = uniqid('/path/to/jukebox');
+        $jukeboxPathname = uniqid('/path/to/jukebox', true);
 
         return [
             'configure with default jukebox pathname' => [
@@ -157,7 +157,7 @@ class CollectionTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $invalidSimilarityMethod = uniqid('this-is-invalid-similarity-method');
+        $invalidSimilarityMethod = uniqid('this-is-invalid-similarity-method', true);
 
         $collection = new Collection();
         $collection->setSimilarityMethod($invalidSimilarityMethod);

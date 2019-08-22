@@ -19,27 +19,27 @@ class Musly
     /**
      * @var string
      */
-    const ANALYSIS_RESULT_OK = 'OK';
+    public const ANALYSIS_RESULT_OK = 'OK';
 
     /**
      * @var string
      */
-    const ANALYSIS_RESULT_FAILED = 'FAILED';
+    public const ANALYSIS_RESULT_FAILED = 'FAILED';
 
     /**
      * @var string
      */
-    const ANALYSIS_RESULT_SKIPPED = 'SKIPPED';
+    public const ANALYSIS_RESULT_SKIPPED = 'SKIPPED';
 
     /**
      * @var string
      */
-    const DEFAULT_BINARY = 'musly';
+    public const DEFAULT_BINARY = 'musly';
 
     /**
      * @var int
      */
-    const DEFAULT_SIMILAR_TRACKS_NUM = 5;
+    public const DEFAULT_SIMILAR_TRACKS_NUM = 5;
 
     /**
      * @var string
@@ -70,7 +70,7 @@ class Musly
     }
 
     /**
-     * @param $binary
+     * @param string $binary
      * @return $this
      */
     public function setBinary($binary)
@@ -338,7 +338,7 @@ class Musly
         $matches = [];
 
         preg_match_all(
-            '/^(?:Analyzing|Skipping[\w ]+)\s\[\d+]:\s(?:\.\.)?(.+)(?:\s-\s\[(OK|FAILED)\]\.?)?$/mU',
+            '/^(?:Analyzing|Skipping[\w ]+)\s\[\d+]:\s(?:\.\.)?(.+)(?:\s-\s\[(OK|FAILED)]\.?)?$/mU',
             $output,
             $matches,
             PREG_SET_ORDER

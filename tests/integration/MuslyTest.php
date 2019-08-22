@@ -29,12 +29,12 @@ class MuslyTest extends TestCase
             static::markTestSkipped('`musly` command not found, skipping.');
         }
 
-        array_map('unlink', glob('./collection*'));
+        static::clean();
     }
 
     public static function tearDownAfterClass(): void
     {
-        array_map('unlink', glob('./collection*'));
+        static::clean();
     }
 
     /**
@@ -54,7 +54,7 @@ class MuslyTest extends TestCase
 
     public function dataInitializeCollectionSuccess()
     {
-        $pathname = uniqid('collection');
+        $pathname = uniqid('collection', true);
 
         return [
             'initialize default collection' => [
@@ -146,7 +146,7 @@ class MuslyTest extends TestCase
         $musly->initializeCollection($collection);
         $musly->setCollection($collection);
 
-        $pathname = uniqid('/path/to/file');
+        $pathname = uniqid('/path/to/file', true);
 
         $musly->analyze($pathname);
     }
@@ -179,7 +179,7 @@ class MuslyTest extends TestCase
 
     public function dataGetSimilarTracksSuccess()
     {
-        $num = rand(1, 4);
+        $num = random_int(1, 4);
         $pathname = 'tests/integration/resources';
         $track = sprintf('%s/1.mp3', $pathname);
 
@@ -265,5 +265,10 @@ class MuslyTest extends TestCase
                 ]
             ],
         ];
+    }
+
+    private static function clean()
+    {
+        array_map('unlink', glob('./collection*'));
     }
 }
