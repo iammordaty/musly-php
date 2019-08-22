@@ -18,21 +18,21 @@ class MuslyTest extends TestCase
      */
     private static $binary;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$binary = $_ENV['musly_binary'] ?: trim((string) shell_exec('which musly'));
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         if (!self::$binary) {
-            $this->markTestSkipped('`musly` command not found, skipping.');
+            static::markTestSkipped('`musly` command not found, skipping.');
         }
 
         array_map('unlink', glob('./collection*'));
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         array_map('unlink', glob('./collection*'));
     }
@@ -46,10 +46,10 @@ class MuslyTest extends TestCase
         $collection = new Collection($params['collection']);
 
         $result = $musly->initializeCollection($collection);
-        $this->assertSame($expected['result'], $result);
+        static::assertSame($expected['result'], $result);
 
         $pathname = $params['collection']['pathname'] ?? Collection::DEFAULT_PATHNAME;
-        $this->assertFileExists($pathname);
+        static::assertFileExists($pathname);
     }
 
     public function dataInitializeCollectionSuccess()
@@ -98,7 +98,7 @@ class MuslyTest extends TestCase
             $result[$track['result']]++;
         }
 
-        $this->assertSame($expected['result'], $result);
+        static::assertSame($expected['result'], $result);
     }
 
     public function dataAnalyzeSuccess()
@@ -167,13 +167,13 @@ class MuslyTest extends TestCase
         $tracks = $musly->getSimilarTracks($params['track'], $params['num']);
 
         if (isset($params['collection']['jukeboxPathname'])) {
-            $this->assertFileExists($params['collection']['jukeboxPathname']);
+            static::assertFileExists($params['collection']['jukeboxPathname']);
         }
 
-        $this->assertCount($expected['count'], $tracks);
+        static::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            $this->assertSame($expected['keys'], array_keys($track));
+            static::assertSame($expected['keys'], array_keys($track));
         }
     }
 
@@ -243,10 +243,10 @@ class MuslyTest extends TestCase
 
         $tracks = $musly->getAllTracks();
 
-        $this->assertCount($expected['count'], $tracks);
+        static::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            $this->assertSame($expected['keys'], array_keys($track));
+            static::assertSame($expected['keys'], array_keys($track));
         }
     }
 
