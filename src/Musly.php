@@ -2,17 +2,12 @@
 
 namespace Musly;
 
-use Musly\Exception\{
-    CollectionNotInitializedException,
-    FileNotFoundException,
-    FileNotFoundInCollectionException,
-    MuslyProcessFailedException
-};
-
-use Symfony\Component\Process\{
-    Exception\ProcessFailedException,
-    Process
-};
+use Musly\Exception\CollectionNotInitializedException;
+use Musly\Exception\FileNotFoundException;
+use Musly\Exception\FileNotFoundInCollectionException;
+use Musly\Exception\MuslyProcessFailedException;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class Musly
 {
@@ -56,7 +51,7 @@ class Musly
      *
      * @throws CollectionNotInitializedException
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         if (isset($params['binary'])) {
             $this->setBinary($params['binary']);
@@ -73,7 +68,7 @@ class Musly
      * @param string $binary
      * @return $this
      */
-    public function setBinary($binary)
+    public function setBinary(string $binary): self
     {
         $this->binary = $binary;
 
@@ -83,7 +78,7 @@ class Musly
     /**
      * @return string
      */
-    public function getBinary()
+    public function getBinary(): string
     {
         return $this->binary;
     }
@@ -94,7 +89,7 @@ class Musly
      *
      * @throws CollectionNotInitializedException
      */
-    public function setCollection(Collection $collection)
+    public function setCollection(Collection $collection): self
     {
         $this->ensureCollectionIsInitialized($collection);
 
@@ -106,7 +101,7 @@ class Musly
     /**
      * @return Collection
      */
-    public function getCollection()
+    public function getCollection(): Collection
     {
         return $this->collection;
     }
@@ -117,7 +112,7 @@ class Musly
      *
      * @throws MuslyProcessFailedException
      */
-    public function initializeCollection(Collection $collection = null)
+    public function initializeCollection(Collection $collection = null): bool
     {
         if (!$collection) {
             $collection = $this->collection;
@@ -152,7 +147,7 @@ class Musly
      * @throws FileNotFoundException
      * @throws MuslyProcessFailedException
      */
-    public function analyze($pathname, $ext = '')
+    public function analyze(string $pathname, string $ext = ''): array
     {
         $this->ensureCollectionIsInitialized($this->collection);
 
@@ -186,14 +181,14 @@ class Musly
 
     /**
      * @param string $pathname
-     * @param int $num
+     * @param int|null $num
      * @return array
      *
      * @throws CollectionNotInitializedException
      * @throws FileNotFoundException
      * @throws MuslyProcessFailedException
      */
-    public function getSimilarTracks($pathname, $num = null)
+    public function getSimilarTracks(string $pathname, ?int $num = null): array
     {
         $this->ensureCollectionIsInitialized($this->collection);
 
@@ -233,7 +228,7 @@ class Musly
      * @throws CollectionNotInitializedException
      * @throws MuslyProcessFailedException
      */
-    public function getAllTracks()
+    public function getAllTracks(): array
     {
         $this->ensureCollectionIsInitialized($this->collection);
 
@@ -259,7 +254,7 @@ class Musly
      *
      * @throws ProcessFailedException
      */
-    protected function runProcess($commandline)
+    protected function runProcess(string $commandline): Process
     {
         $process = Process::fromShellCommandline($commandline);
         $process->mustRun();
@@ -269,10 +264,11 @@ class Musly
 
     /**
      * @param Collection $collection
+     * @return void
      *
      * @throws CollectionNotInitializedException
      */
-    protected function ensureCollectionIsInitialized($collection)
+    protected function ensureCollectionIsInitialized(Collection $collection): void
     {
         if (!$collection->isInitialized()) {
             throw new CollectionNotInitializedException(
@@ -283,10 +279,11 @@ class Musly
 
     /**
      * @param string $pathname
+     * @return void
      *
      * @throws FileNotFoundException
      */
-    protected function ensurePathname($pathname)
+    protected function ensurePathname(string $pathname): void
     {
         if (!file_exists($pathname)) {
             throw new FileNotFoundException(sprintf('"%s" does not exists', $pathname));
@@ -297,7 +294,7 @@ class Musly
      * @param string $output
      * @return array
      */
-    private function extractListingResult($output)
+    private function extractListingResult(string $output): array
     {
         $matches = [];
 
@@ -333,7 +330,7 @@ class Musly
      * @param string $output
      * @return array
      */
-    private function extractAnalysisResult($output)
+    private function extractAnalysisResult(string $output): array
     {
         $matches = [];
 

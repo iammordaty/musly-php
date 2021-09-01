@@ -2,16 +2,13 @@
 
 namespace Musly\Tests\Integration;
 
+use Musly\Collection;
+use Musly\Exception\FileNotFoundException;
+use Musly\Exception\FileNotFoundInCollectionException;
+use Musly\Musly;
 use PHPUnit\Framework\TestCase;
 
-use Musly\{
-    Collection,
-    Exception\FileNotFoundException,
-    Exception\FileNotFoundInCollectionException,
-    Musly
-};
-
-class MuslyTest extends TestCase
+final class MuslyTest extends TestCase
 {
     /**
      * @var string
@@ -20,21 +17,21 @@ class MuslyTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$binary = $_ENV['musly_binary'] ?: trim((string) shell_exec('which musly'));
+        self::$binary = $_ENV['musly_binary'] ?? trim((string) shell_exec('which musly'));
     }
 
     public function setUp(): void
     {
         if (!self::$binary) {
-            static::markTestSkipped('`musly` command not found, skipping.');
+            self::markTestSkipped('`musly` command not found, skipping.');
         }
 
-        static::clean();
+        self::clean();
     }
 
     public static function tearDownAfterClass(): void
     {
-        static::clean();
+        self::clean();
     }
 
     /**
@@ -46,13 +43,13 @@ class MuslyTest extends TestCase
         $collection = new Collection($params['collection']);
 
         $result = $musly->initializeCollection($collection);
-        static::assertSame($expected['result'], $result);
+        self::assertSame($expected['result'], $result);
 
         $pathname = $params['collection']['pathname'] ?? Collection::DEFAULT_PATHNAME;
-        static::assertFileExists($pathname);
+        self::assertFileExists($pathname);
     }
 
-    public function dataInitializeCollectionSuccess()
+    public function dataInitializeCollectionSuccess(): array
     {
         $pathname = uniqid('collection', true);
 
@@ -98,10 +95,10 @@ class MuslyTest extends TestCase
             $result[$track['result']]++;
         }
 
-        static::assertSame($expected['result'], $result);
+        self::assertSame($expected['result'], $result);
     }
 
-    public function dataAnalyzeSuccess()
+    public function dataAnalyzeSuccess(): array
     {
         $directory = 'tests/integration/resources';
         $ext = 'wav';
@@ -167,17 +164,17 @@ class MuslyTest extends TestCase
         $tracks = $musly->getSimilarTracks($params['track'], $params['num']);
 
         if (isset($params['collection']['jukeboxPathname'])) {
-            static::assertFileExists($params['collection']['jukeboxPathname']);
+            self::assertFileExists($params['collection']['jukeboxPathname']);
         }
 
-        static::assertCount($expected['count'], $tracks);
+        self::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            static::assertSame($expected['keys'], array_keys($track));
+            self::assertSame($expected['keys'], array_keys($track));
         }
     }
 
-    public function dataGetSimilarTracksSuccess()
+    public function dataGetSimilarTracksSuccess(): array
     {
         $num = random_int(1, 4);
         $pathname = 'tests/integration/resources';
@@ -243,14 +240,14 @@ class MuslyTest extends TestCase
 
         $tracks = $musly->getAllTracks();
 
-        static::assertCount($expected['count'], $tracks);
+        self::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            static::assertSame($expected['keys'], array_keys($track));
+            self::assertSame($expected['keys'], array_keys($track));
         }
     }
 
-    public function dataGetAllTracks()
+    public function dataGetAllTracks(): array
     {
         $pathname = 'tests/integration/resources';
 
