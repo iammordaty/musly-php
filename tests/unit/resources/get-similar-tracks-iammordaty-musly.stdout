@@ -22,6 +22,6 @@ Reading collection file: collection.musly
 Loaded 5 musly tracks to memory.
 Initializing jukebox...
 Computing the k=5 most similar tracks to: /Audio/Sample/Dero feat. Mr. X - Supertango [Play The Bandoneon Mix].mp3
-track-id: 1, track-similarity: 0.0153444, track-origin: /Audio/Sample/Armand Van Helden - Into Your Eyes [Original Club Mix].mp3
-track-id: 2, track-similarity: 0.0159516, track-origin: /Audio/Sample/Hardy Hard - Tellievision [Non Vocal Mix].mp3
-track-id: 3, track-similarity: 0.0160871, track-origin: /Audio/Sample/Lovestern Galaktika Project meets Pulsedriver & Ole Van Dansk - Move For Freedom [Club Mix].mp3
+track-id: 1, track-distance: 0.0153444, track-origin: /Audio/Sample/Armand Van Helden - Into Your Eyes [Original Club Mix].mp3
+track-id: 2, track-distance: 0.0159516, track-origin: /Audio/Sample/Hardy Hard - Tellievision [Non Vocal Mix].mp3
+track-id: 3, track-distance: 0.0160871, track-origin: /Audio/Sample/Lovestern Galaktika Project meets Pulsedriver & Ole Van Dansk - Move For Freedom [Club Mix].mp3
