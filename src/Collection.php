@@ -6,53 +6,35 @@ use Musly\Exception\InvalidArgumentException;
 
 class Collection extends \SplFileInfo
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public const SIMILARITY_METHOD_MANDEL_ELLIS = 'mandelellis';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const SIMILARITY_METHOD_TIMBRE = 'timbre';
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     public const AVAILABLE_SIMILARITY_METHODS = [
         self::SIMILARITY_METHOD_MANDEL_ELLIS,
         self::SIMILARITY_METHOD_TIMBRE,
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const DEFAULT_PATHNAME = 'collection.musly';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const DEFAULT_JUKEBOX_FILE_EXT = 'jbox';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const USE_DEFAULT_JUKEBOX_PATHNAME = '%COLL%.' . self::DEFAULT_JUKEBOX_FILE_EXT;
 
-    /**
-     * @var string|null
-     */
-    private $similarityMethod;
+    /** @var string|null */
+    private ?string $similarityMethod = null;
 
-    /**
-     * @var string|null
-     */
-    private $jukeboxPathname;
+    /** @var string|null */
+    private ?string $jukeboxPathname = null;
 
-    /**
-     * @param array|string $params
-     */
-    public function __construct($params = [])
+    /** @param array|string|null $params */
+    public function __construct(array|string|null $params = [])
     {
         $this->normalizeParams($params);
 
@@ -67,9 +49,7 @@ class Collection extends \SplFileInfo
         }
     }
 
-    /**
-     * @return bool
-     */
+    /** @return bool */
     public function isInitialized(): bool
     {
         return $this->isFile();
@@ -77,7 +57,7 @@ class Collection extends \SplFileInfo
 
     /**
      * @param string $similarityMethod
-     * @return $this
+     * @return self
      *
      * @throws InvalidArgumentException
      */
@@ -92,9 +72,7 @@ class Collection extends \SplFileInfo
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
+    /** @return string|null */
     public function getSimilarityMethod(): ?string
     {
         return $this->similarityMethod;
@@ -102,32 +80,32 @@ class Collection extends \SplFileInfo
 
     /**
      * @param string $jukeboxPathname
-     * @return $this
+     * @return self
      */
     public function setJukeboxPathname(string $jukeboxPathname = self::USE_DEFAULT_JUKEBOX_PATHNAME): self
     {
         $this->jukeboxPathname = $jukeboxPathname;
 
         if ($this->jukeboxPathname === self::USE_DEFAULT_JUKEBOX_PATHNAME) {
-            $this->jukeboxPathname  = $this->getDefaultJukeboxPathname();
+            $this->jukeboxPathname = $this->getDefaultJukeboxPathname();
         }
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
+    /** @return string|null */
     public function getJukeboxPathname(): ?string
     {
         return $this->jukeboxPathname;
     }
 
-    /**
-     * @param string|array $params
-     */
-    private function normalizeParams(&$params): void
+    /** @param array|string|null $params */
+    private function normalizeParams(array|string|null &$params): void
     {
+        if ($params === null) {
+            $params = [];
+        }
+
         if (is_string($params)) {
             $params = [ 'pathname' => $params ];
         }
@@ -137,9 +115,7 @@ class Collection extends \SplFileInfo
         }
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getDefaultJukeboxPathname(): string
     {
         $path = '';

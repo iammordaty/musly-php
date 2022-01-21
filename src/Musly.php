@@ -128,14 +128,14 @@ class Musly
 
     /**
      * @param string $pathname
-     * @param string $ext
+     * @param string|null $ext
      * @return array
      *
      * @throws CollectionNotInitializedException
      * @throws FileNotFoundException
      * @throws MuslyProcessFailedException
      */
-    public function analyze(string $pathname, string $ext = ''): array
+    public function analyze(string $pathname, ?string $ext = null): array
     {
         $this->ensureCollectionIsInitialized($this->collection);
 
@@ -330,14 +330,10 @@ class Musly
             PREG_SET_ORDER
         );
 
-        $tracks = [];
-
-        foreach ($matches as $match) {
-            $tracks[] = [
-                'track-origin' => ltrim($match[1], '.'),
-                'result' => $match[2] ?? self::ANALYSIS_RESULT_SKIPPED,
-            ];
-        }
+        $tracks = array_map(fn ($match) => [
+            'track-origin' => ltrim($match[1], '.'),
+            'result' => $match[2] ?? self::ANALYSIS_RESULT_SKIPPED,
+        ], $matches);
 
         return $tracks;
     }
