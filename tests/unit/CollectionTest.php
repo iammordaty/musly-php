@@ -8,10 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 final class CollectionTest extends TestCase
 {
-    /**
-     * @dataProvider dataCreateSuccess
-     */
-    public function testCreateSuccess($params, $expected)
+    /** @dataProvider dataCreateSuccess */
+    public function testCreateSuccess(array|string|null $params, array $expected)
     {
         $collection = new Collection($params);
 
@@ -20,7 +18,7 @@ final class CollectionTest extends TestCase
         self::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
     }
 
-    public function dataCreateSuccess()
+    public function dataCreateSuccess(): array
     {
         $pathname = uniqid('/path/to/collection', true);
         $defaultJukeboxPathname = $pathname . '.jbox';
@@ -102,10 +100,8 @@ final class CollectionTest extends TestCase
         new Collection([ 'similarityMethod' => $invalidSimilarityMethod ]);
     }
 
-    /**
-     * @dataProvider dataConfigureSuccess
-     */
-    public function testConfigureSuccess($params, $expected)
+    /** @dataProvider dataConfigureSuccess */
+    public function testConfigureSuccess(array $params, array $expected)
     {
         $collection = new Collection();
 
@@ -121,7 +117,7 @@ final class CollectionTest extends TestCase
         self::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
     }
 
-    public function dataConfigureSuccess()
+    public function dataConfigureSuccess(): array
     {
         $jukeboxPathname = uniqid('/path/to/jukebox', true);
 

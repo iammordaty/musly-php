@@ -10,10 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 final class MuslyTest extends TestCase
 {
-    /**
-     * @var string
-     */
-    private static $binary;
+    /** @var string */
+    private static string $binary;
 
     public static function setUpBeforeClass(): void
     {
@@ -34,10 +32,8 @@ final class MuslyTest extends TestCase
         self::clean();
     }
 
-    /**
-     * @dataProvider dataInitializeCollectionSuccess
-     */
-    public function testInitializeCollectionSuccess($params, $expected)
+    /** @dataProvider dataInitializeCollectionSuccess */
+    public function testInitializeCollectionSuccess(array $params, array $expected)
     {
         $musly = new Musly([ 'binary' => self::$binary ]);
         $collection = new Collection($params['collection']);
@@ -73,10 +69,8 @@ final class MuslyTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataAnalyzeSuccess
-     */
-    public function testAnalyzeSuccess($params, $expected)
+    /** @dataProvider dataAnalyzeSuccess */
+    public function testAnalyzeSuccess(array $params, array $expected)
     {
         $musly = new Musly([ 'binary' => self::$binary ]);
         $collection = new Collection();
@@ -148,10 +142,8 @@ final class MuslyTest extends TestCase
         $musly->analyze($pathname);
     }
 
-    /**
-     * @dataProvider dataGetSimilarTracksSuccess
-     */
-    public function testGetSimilarTracksSuccess($params, $expected)
+    /** @dataProvider dataGetSimilarTracksSuccess */
+    public function testGetSimilarTracksSuccess(array $params, array $expected)
     {
         $musly = new Musly([ 'binary' => self::$binary ]);
         $collection = new Collection($params['collection']);
@@ -225,10 +217,8 @@ final class MuslyTest extends TestCase
         $musly->getSimilarTracks($pathname);
     }
 
-    /**
-     * @dataProvider dataGetAllTracks
-     */
-    public function testGetAllTracks($params, $expected)
+    /** @dataProvider dataGetAllTracks */
+    public function testGetAllTracks(array $params, array $expected)
     {
         $musly = new Musly([ 'binary' => self::$binary ]);
         $collection = new Collection();
