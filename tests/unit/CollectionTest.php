@@ -19,9 +19,9 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection($params);
 
-        $this->assertSame($expected['pathname'], $collection->getPathname());
-        $this->assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
-        $this->assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
+        static::assertSame($expected['pathname'], $collection->getPathname());
+        static::assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
+        static::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
     }
 
     public function dataCreateSuccess()
@@ -121,8 +121,8 @@ class CollectionTest extends TestCase
             $collection->setJukeboxPathname($params['jukeboxPathname']);
         }
 
-        $this->assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
-        $this->assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
+        static::assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
+        static::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
     }
 
     public function dataConfigureSuccess()

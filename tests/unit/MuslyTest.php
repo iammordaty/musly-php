@@ -27,8 +27,8 @@ class MuslyTest extends TestCase
     {
         $musly = new Musly($params);
 
-        $this->assertSame($expected['binary'], $musly->getBinary());
-        $this->assertSame($expected['collection']->getPathname(), $musly->getCollection()->getPathname());
+        static::assertSame($expected['binary'], $musly->getBinary());
+        static::assertSame($expected['collection']->getPathname(), $musly->getCollection()->getPathname());
     }
 
     public function dataCreateSuccess()
@@ -82,8 +82,8 @@ class MuslyTest extends TestCase
         $musly->setBinary($params['binary']);
         $musly->setCollection($params['collection']);
 
-        $this->assertSame($expected['binary'], $musly->getBinary());
-        $this->assertSame($expected['collection'], $musly->getCollection());
+        static::assertSame($expected['binary'], $musly->getBinary());
+        static::assertSame($expected['collection'], $musly->getCollection());
     }
 
     public function dataConfigureSuccess()
@@ -126,14 +126,14 @@ class MuslyTest extends TestCase
             ->setMethods([ 'runProcess' ])
             ->getMock();
 
-        $expectedTimes = $expected['commandline'] ? $this->once() : $this->never();
+        $expectedTimes = $expected['commandline'] ? static::once() : static::never();
 
         $musly
             ->expects($expectedTimes)
             ->method('runProcess')
             ->with($expected['commandline']);
 
-        $this->assertSame($expected['result'], $musly->initializeCollection($params['collection']));
+        static::assertSame($expected['result'], $musly->initializeCollection($params['collection']));
     }
 
     public function dataInitializeCollectionSuccess()
@@ -211,7 +211,7 @@ class MuslyTest extends TestCase
 
         $musly
             ->method('runProcess')
-            ->will($this->throwException(new ProcessFailedException($process)));
+            ->will(static::throwException(new ProcessFailedException($process)));
 
         $collection = $this->getCollectionMock([ 'initialized' => false ]);
 
@@ -237,7 +237,7 @@ class MuslyTest extends TestCase
             ->getMock();
 
         $musly
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('runProcess')
             ->with($expected['commandline'])
             ->willReturn($process);
@@ -254,7 +254,7 @@ class MuslyTest extends TestCase
             $result[$track['result']]++;
         }
 
-        $this->assertSame($expected['result'], $result);
+        static::assertSame($expected['result'], $result);
     }
 
     public function dataAnalyzeSuccess()
@@ -387,7 +387,7 @@ class MuslyTest extends TestCase
         $musly
             ->expects($expected['times'])
             ->method('runProcess')
-            ->will($this->throwException(new ProcessFailedException($params['process'])));
+            ->will(static::throwException(new ProcessFailedException($params['process'])));
 
         $musly->analyze($params['pathname']);
     }
@@ -411,17 +411,17 @@ class MuslyTest extends TestCase
             ->getMock();
 
         $musly
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('runProcess')
             ->with($expected['commandline'])
             ->willReturn($process);
 
         $tracks = $musly->getSimilarTracks($params['pathname'], $params['num']);
 
-        $this->assertCount($expected['count'], $tracks);
+        static::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            $this->assertSame($expected['keys'], array_keys($track));
+            static::assertSame($expected['keys'], array_keys($track));
         }
     }
 
@@ -513,7 +513,7 @@ class MuslyTest extends TestCase
         $musly
             ->expects($expected['times'])
             ->method('runProcess')
-            ->will($this->throwException(new ProcessFailedException($params['process'])));
+            ->will(static::throwException(new ProcessFailedException($params['process'])));
 
         $musly->getSimilarTracks($params['pathname']);
     }
@@ -538,7 +538,7 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => $this->once(),
+                    'times' => static::once(),
                     'exception' => FileNotFoundInCollectionException::class,
                 ]
             ],
@@ -564,17 +564,17 @@ class MuslyTest extends TestCase
             ->getMock();
 
         $musly
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('runProcess')
             ->with($expected['commandline'])
             ->willReturn($process);
 
         $tracks = $musly->getAllTracks();
 
-        $this->assertCount($expected['count'], $tracks);
+        static::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            $this->assertSame($expected['keys'], array_keys($track));
+            static::assertSame($expected['keys'], array_keys($track));
         }
     }
 
@@ -613,7 +613,7 @@ class MuslyTest extends TestCase
         $musly
             ->expects($expected['times'])
             ->method('runProcess')
-            ->will($this->throwException(new ProcessFailedException($params['process'])));
+            ->will(static::throwException(new ProcessFailedException($params['process'])));
 
         $musly->getAllTracks();
     }
@@ -634,7 +634,7 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => $this->never(),
+                    'times' => static::never(),
                     'exception' => FileNotFoundException::class,
                 ]
             ],
@@ -657,7 +657,7 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => $this->once(),
+                    'times' => static::once(),
                     'exception' => MuslyProcessFailedException::class,
                 ]
             ],
@@ -668,7 +668,7 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => $this->never(),
+                    'times' => static::never(),
                     'exception' => CollectionNotInitializedException::class,
                 ]
             ],
