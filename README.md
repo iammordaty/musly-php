@@ -1,6 +1,6 @@
 # iammordaty/musly-php
 
-musly-php is simple PHP wrapper around the `musly` command line tool.
+musly-php is simple PHP wrapper around the `musly` commandline tool.
 
 > Musly is a fast and high-quality audio music similarity library written in C/C++.
 >
@@ -22,11 +22,11 @@ $ composer require iammordaty/musly-php
 ## Basic Usage
 
 ```php
-use \Musly\Musly;
+use Musly\Musly;
 
 $musly = new Musly();
-$musly->initializeCollection();
 
+$musly->initializeCollection();
 $musly->analyze('/path/to/dir/or/track.mp3');
 
 $similarTracks = $musly->getSimilarTracks('/path/to/track.mp3');
@@ -35,13 +35,11 @@ $similarTracks = $musly->getSimilarTracks('/path/to/track.mp3');
 ## Advanced Usage
 
 ```php
-use \Musly\{
-    Collection,
-    Exception\FileNotFoundException,
-    Exception\FileNotFoundInCollectionException,
-    Exception\MuslyProcessFailedException,
-    Musly
-};
+use Musly\Collection
+use Musly\Exception\FileNotFoundException
+use Musly\Exception\FileNotFoundInCollectionException
+use Musly\Exception\MuslyProcessFailedException
+use Musly\Musly;
 
 $collection = new Collection([
     'pathname' => '/path/to/collection.musly',
@@ -69,10 +67,10 @@ try {
     $collectionTracks = $musly->getAllTracks();
 }
 catch (FileNotFoundException | FileNotFoundInCollectionException $e) {
-    // handle expception
+    // handle exception
 }
 catch (MuslyProcessFailedException $e) {
-    // handle expception
+    // handle exception
 }
 ```
 
@@ -86,7 +84,7 @@ To execute the test suite, you'll need phpunit.
 $ phpunit
 ```
 
-## Further informations
+## Further information
 
 - [Musly website](http://www.musly.org/)
 - [Musly repository](https://github.com/dominikschnitzer/musly)
