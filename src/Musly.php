@@ -39,6 +39,16 @@ class Musly
     /**
      * @var string
      */
+    protected const MUSLY_HEADER_LAST_LINE_ALL_TRACKS_REGEXP = '/(Reading collection file:.+\n)/';
+
+    /**
+     * @var string
+     */
+    protected const MUSLY_HEADER_LAST_LINE_SIMILAR_TRACKS_REGEXP = '/(Computing the k=\d+ most similar tracks to:.+)/';
+
+    /**
+     * @var string
+     */
     private $binary = self::DEFAULT_BINARY;
 
     /**
@@ -215,7 +225,9 @@ class Musly
             $process = $this->runProcess($commandline);
             $output = $process->getOutput();
 
-            return $this->extractListingResult($output, 24);
+            $listing = $this->removeHeader($output, self::MUSLY_HEADER_LAST_LINE_SIMILAR_TRACKS_REGEXP);
+
+            return $this->createTracks($listing);
         } catch (ProcessFailedException $e) {
             if (stripos($e->getProcess()->getErrorOutput(), 'file not found') !== false) {
                 throw new FileNotFoundInCollectionException(
@@ -247,7 +259,9 @@ class Musly
             $process = $this->runProcess($commandline);
             $output = $process->getOutput();
 
-            return $this->extractListingResult($output, 21);
+            $listing = $this->removeHeader($output, self::MUSLY_HEADER_LAST_LINE_ALL_TRACKS_REGEXP);
+
+            return $this->createTracks($listing);
         } catch (ProcessFailedException $e) {
             throw new MuslyProcessFailedException($e->getProcess());
         }
@@ -296,23 +310,17 @@ class Musly
     }
 
     /**
-     * @param string $output
-     * @param int $linesToSkip
+     * @param string $listing
      * @return array
      */
-    private function extractListingResult(string $output, int $linesToSkip): array
+    private function createTracks(string $listing): array
     {
-        $lines = explode(PHP_EOL, trim($output));
-        $linesToSkipZeroBased = $linesToSkip - 1;
-        $withAttrs = strpos($output, 'track-id') !== false;
+        $lines = explode(PHP_EOL, trim($listing));
+        $withAttrs = strpos($listing, 'track-id') !== false;
 
         $tracks = [];
 
-        foreach ($lines as $index => $line) {
-            if ($index <= $linesToSkipZeroBased) {
-                continue;
-            }
-
+        foreach ($lines as $line) {
             if ($withAttrs && preg_match_all('/([^:]+):\s([^,]*)(?:,\s)?/', $line, $matches)) {
                 $tracks[] = array_combine($matches[1], $matches[2]);
 
@@ -354,5 +362,19 @@ class Musly
         }
 
         return $tracks;
+    }
+
+    private function removeHeader(string $output, string $lastLineRegexp): string
+    {
+        $matches = [];
+
+        preg_match($lastLineRegexp, $output, $matches, PREG_OFFSET_CAPTURE);
+
+        [ $headerLastLineContent, $headerLastLinePosition ] = $matches[0];
+
+        $headerLastCharPosition = $headerLastLinePosition + strlen($headerLastLineContent);
+        $outputWithoutHeader = substr_replace($output, '', 0, $headerLastCharPosition);
+
+        return $outputWithoutHeader;
     }
 }

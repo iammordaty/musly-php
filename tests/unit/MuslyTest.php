@@ -506,6 +506,22 @@ final class MuslyTest extends TestCase
             }
         }
 
+        $datasets['get similar tracks with incomplete jukebox'] = [
+            [
+                'binary' => $binary,
+                'collection' => $collection,
+                'pathname' => $pathname,
+                'num' => null,
+                'stdout' => file_get_contents('./tests/unit/resources/get-similar-tracks-with-incomplete-jukebox.stdout'),
+                'extraParams' => null,
+            ],
+            [
+                'commandline' => sprintf('%s -c "%s" -p "%s" -k 5', $binary, $collection, $pathname),
+                'count' => 3,
+                'keys' => [ 'track-id', 'track-distance', 'track-origin' ],
+            ]
+        ];
+
         $num = 1000;
 
         $datasets['get similar tracks with limit from large collection'] = [
@@ -668,6 +684,10 @@ final class MuslyTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $process
+            ->method('getErrorOutput')
+            ->willReturn(uniqid('error_output', true));
+
         return [
             'throw an exception if the file does not exist' => [
                 [
@@ -690,6 +710,10 @@ final class MuslyTest extends TestCase
         $process = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $process
+            ->method('getErrorOutput')
+            ->willReturn(uniqid('error_output', true));
 
         return [
             'throw an exception if process fails' => [
