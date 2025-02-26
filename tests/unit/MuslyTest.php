@@ -14,10 +14,8 @@ use Symfony\Component\Process\Process;
 
 final class MuslyTest extends TestCase
 {
-    /**
-     * @dataProvider dataCreateSuccess
-     */
-    public function testCreateSuccess($params, $expected)
+    /** @dataProvider dataCreateSuccess */
+    public function testCreateSuccess(array $params, array $expected)
     {
         $musly = new Musly($params);
 
@@ -66,10 +64,8 @@ final class MuslyTest extends TestCase
         new Musly($params);
     }
 
-    /**
-     * @dataProvider dataConfigureSuccess
-     */
-    public function testConfigureSuccess($params, $expected)
+    /** @dataProvider dataConfigureSuccess */
+    public function testConfigureSuccess(array $params, array $expected)
     {
         $musly = new Musly();
 
@@ -110,10 +106,8 @@ final class MuslyTest extends TestCase
         $musly->setCollection($collection);
     }
 
-    /**
-     * @dataProvider dataInitializeCollectionSuccess
-     */
-    public function testInitializeCollectionSuccess($params, $expected)
+    /** @dataProvider dataInitializeCollectionSuccess */
+    public function testInitializeCollectionSuccess(array $params, array $expected)
     {
         $musly = $this->getMockBuilder(Musly::class)
             ->setConstructorArgs([ [ 'binary' => $params['binary'] ] ])
@@ -215,7 +209,7 @@ final class MuslyTest extends TestCase
     /**
      * @dataProvider dataAnalyzeSuccess
      */
-    public function testAnalyzeSuccess($params, $expected)
+    public function testAnalyzeSuccess(array $params, array $expected)
     {
         $process = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
@@ -370,7 +364,7 @@ final class MuslyTest extends TestCase
      * @dataProvider dataCommonErrors
      * @dataProvider dataFileNotFoundError
      */
-    public function testAnalyzeError($params, $expected)
+    public function testAnalyzeError(array $params, array $expected)
     {
         $this->expectException($expected['exception']);
 
@@ -389,7 +383,7 @@ final class MuslyTest extends TestCase
     /**
      * @dataProvider dataGetSimilarTracksSuccess
      */
-    public function testGetSimilarTracksSuccess($params, $expected)
+    public function testGetSimilarTracksSuccess(array $params, array $expected)
     {
         $process = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
@@ -548,7 +542,7 @@ final class MuslyTest extends TestCase
      * @dataProvider dataFileNotFoundError
      * @dataProvider dataFileNotFoundInCollectionExceptionError
      */
-    public function testGetSimilarTracksError($params, $expected)
+    public function testGetSimilarTracksError(array $params, array $expected)
     {
         $this->expectException($expected['exception']);
 
@@ -594,7 +588,7 @@ final class MuslyTest extends TestCase
     /**
      * @dataProvider dataGetAllTracks
      */
-    public function testGetAllTracks($params, $expected)
+    public function testGetAllTracks(array $params, array $expected)
     {
         $process = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
@@ -660,7 +654,7 @@ final class MuslyTest extends TestCase
     /**
      * @dataProvider dataCommonErrors
      */
-    public function testGetAllTracksError($params, $expected)
+    public function testGetAllTracksError(array $params, array $expected)
     {
         $this->expectException($expected['exception']);
 

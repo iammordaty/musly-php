@@ -11,50 +11,32 @@ use Symfony\Component\Process\Process;
 
 class Musly
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public const ANALYSIS_RESULT_OK = 'OK';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const ANALYSIS_RESULT_FAILED = 'FAILED';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const ANALYSIS_RESULT_SKIPPED = 'SKIPPED';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public const DEFAULT_BINARY = 'musly';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public const DEFAULT_SIMILAR_TRACKS_NUM = 5;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected const MUSLY_HEADER_LAST_LINE_ALL_TRACKS_REGEXP = '/(Reading collection file:.+\n)/';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected const MUSLY_HEADER_LAST_LINE_SIMILAR_TRACKS_REGEXP = '/(Computing the k=\d+ most similar tracks to:.+)/';
 
-    /**
-     * @var string
-     */
-    private $binary = self::DEFAULT_BINARY;
+    /** @var string */
+    private string $binary = self::DEFAULT_BINARY;
 
-    /**
-     * @var Collection
-     */
-    private $collection;
+    /** @var Collection */
+    private Collection $collection;
 
     /**
      * @param array $params
@@ -76,7 +58,7 @@ class Musly
 
     /**
      * @param string $binary
-     * @return $this
+     * @return self
      */
     public function setBinary(string $binary): self
     {
@@ -85,9 +67,7 @@ class Musly
         return $this;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getBinary(): string
     {
         return $this->binary;
@@ -95,7 +75,7 @@ class Musly
 
     /**
      * @param Collection $collection
-     * @return $this
+     * @return self
      *
      * @throws CollectionNotInitializedException
      */
@@ -108,9 +88,7 @@ class Musly
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
+    /** @return Collection */
     public function getCollection(): Collection
     {
         return $this->collection;
@@ -122,7 +100,7 @@ class Musly
      *
      * @throws MuslyProcessFailedException
      */
-    public function initializeCollection(Collection $collection = null): bool
+    public function initializeCollection(?Collection $collection = null): bool
     {
         if (!$collection) {
             $collection = $this->collection;
@@ -316,7 +294,7 @@ class Musly
     private function createTracks(string $listing): array
     {
         $lines = explode(PHP_EOL, trim($listing));
-        $withAttrs = strpos($listing, 'track-id') !== false;
+        $withAttrs = str_contains($listing, 'track-id');
 
         $tracks = [];
 
