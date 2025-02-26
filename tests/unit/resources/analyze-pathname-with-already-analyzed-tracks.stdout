@@ -1,0 +1,27 @@
+Music Similarity Library (Musly) - http://www.musly.org
+Version: 0.2
+(c) 2013-2014, Dominik Schnitzer <dominik@schnitzer.at>
+    2014-2016, Jan Schlüter <jan.schlueter@ofai.at>
+
+Initialized music similarity method: timbre
+~~~
+A timbre only music similarity measure based 'mandelellis'. It
+improves the basic measure in multiple ways to achieve superior
+results:
+We compute a single Gaussian representation from the songs
+using 25 MFCCs. The similarity between two tracks is computed
+with the Jensen-Shannon divergence. The Similarities are
+normalized with Mutual Proximity:
+D. Schnitzer et al.: Using mutual proximity to improve
+content-based audio similarity. In the proceedings of the 12th
+International Society for Music Information Retrieval
+Conference, ISMIR, 2011.
+~~~
+Installed audio decoder: libav
+Reading collection file: collection.musly
+Read 0 musly tracks.
+Skipping already analyzed [1]: ..sedriver & Ole Van Dansk - Move For Freedom [Club Mix].mp3
+Skipping already analyzed [1]: ..Played-A-Live (The Bongo Song) [Original Club Version].mp3
+Analyzing [1]: ..Audio/Sample/Hardy Hard - Tellievision [Non Vocal Mix].mp3 - [OK]
+Analyzing [2]: ..sedriver & Ole Van Dansk - Move For Freedom [Club Mix].mp3 - [OK]
+Analyzing [3]: ..Played-A-Live (The Bongo Song) [Original Club Version].mp3 - [OK]
