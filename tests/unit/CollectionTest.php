@@ -2,15 +2,11 @@
 
 namespace Musly\Tests\Unit;
 
+use Musly\Collection;
+use Musly\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-use Musly\{
-    Collection,
-    Exception\InvalidArgumentException
-};
-
-
-class CollectionTest extends TestCase
+final class CollectionTest extends TestCase
 {
     /**
      * @dataProvider dataCreateSuccess
@@ -19,9 +15,9 @@ class CollectionTest extends TestCase
     {
         $collection = new Collection($params);
 
-        static::assertSame($expected['pathname'], $collection->getPathname());
-        static::assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
-        static::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
+        self::assertSame($expected['pathname'], $collection->getPathname());
+        self::assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
+        self::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
     }
 
     public function dataCreateSuccess()
@@ -121,8 +117,8 @@ class CollectionTest extends TestCase
             $collection->setJukeboxPathname($params['jukeboxPathname']);
         }
 
-        static::assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
-        static::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
+        self::assertSame($expected['similarityMethod'], $collection->getSimilarityMethod());
+        self::assertSame($expected['jukeboxPathname'], $collection->getJukeboxPathname());
     }
 
     public function dataConfigureSuccess()

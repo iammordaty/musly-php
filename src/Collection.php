@@ -32,12 +32,12 @@ class Collection extends \SplFileInfo
     /**
      * @var string
      */
-    public const USE_DEFAULT_JUKEBOX_PATHNAME = '%COLL%.jbox';
+    public const DEFAULT_JUKEBOX_FILE_EXT = 'jbox';
 
     /**
      * @var string
      */
-    public const DEFAULT_JUKEBOX_FILE_EXT = 'jbox';
+    public const USE_DEFAULT_JUKEBOX_PATHNAME = '%COLL%.' . self::DEFAULT_JUKEBOX_FILE_EXT;
 
     /**
      * @var string|null
@@ -70,7 +70,7 @@ class Collection extends \SplFileInfo
     /**
      * @return bool
      */
-    public function isInitialized()
+    public function isInitialized(): bool
     {
         return $this->isFile();
     }
@@ -81,7 +81,7 @@ class Collection extends \SplFileInfo
      *
      * @throws InvalidArgumentException
      */
-    public function setSimilarityMethod($similarityMethod)
+    public function setSimilarityMethod(string $similarityMethod): self
     {
         if (in_array($similarityMethod, self::AVAILABLE_SIMILARITY_METHODS) === false) {
             throw new InvalidArgumentException(sprintf('Invalid similarity method specified (%s)', $similarityMethod));
@@ -95,7 +95,7 @@ class Collection extends \SplFileInfo
     /**
      * @return string|null
      */
-    public function getSimilarityMethod()
+    public function getSimilarityMethod(): ?string
     {
         return $this->similarityMethod;
     }
@@ -104,7 +104,7 @@ class Collection extends \SplFileInfo
      * @param string $jukeboxPathname
      * @return $this
      */
-    public function setJukeboxPathname($jukeboxPathname = self::USE_DEFAULT_JUKEBOX_PATHNAME)
+    public function setJukeboxPathname(string $jukeboxPathname = self::USE_DEFAULT_JUKEBOX_PATHNAME): self
     {
         $this->jukeboxPathname = $jukeboxPathname;
 
@@ -118,7 +118,7 @@ class Collection extends \SplFileInfo
     /**
      * @return string|null
      */
-    public function getJukeboxPathname()
+    public function getJukeboxPathname(): ?string
     {
         return $this->jukeboxPathname;
     }
@@ -126,7 +126,7 @@ class Collection extends \SplFileInfo
     /**
      * @param string|array $params
      */
-    private function normalizeParams(&$params)
+    private function normalizeParams(&$params): void
     {
         if (is_string($params)) {
             $params = [ 'pathname' => $params ];
@@ -140,7 +140,7 @@ class Collection extends \SplFileInfo
     /**
      * @return string
      */
-    private function getDefaultJukeboxPathname()
+    private function getDefaultJukeboxPathname(): string
     {
         $path = '';
 

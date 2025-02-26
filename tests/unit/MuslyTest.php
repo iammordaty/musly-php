@@ -2,23 +2,17 @@
 
 namespace Musly\Tests\Unit;
 
+use Musly\Collection;
+use Musly\Exception\CollectionNotInitializedException;
+use Musly\Exception\FileNotFoundException;
+use Musly\Exception\FileNotFoundInCollectionException;
+use Musly\Exception\MuslyProcessFailedException;
+use Musly\Musly;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
-use Musly\{
-    Collection,
-    Exception\CollectionNotInitializedException,
-    Exception\FileNotFoundException,
-    Exception\FileNotFoundInCollectionException,
-    Exception\MuslyProcessFailedException,
-    Musly
-};
-
-use Symfony\Component\Process\{
-    Exception\ProcessFailedException,
-    Process
-};
-
-class MuslyTest extends TestCase
+final class MuslyTest extends TestCase
 {
     /**
      * @dataProvider dataCreateSuccess
@@ -27,11 +21,11 @@ class MuslyTest extends TestCase
     {
         $musly = new Musly($params);
 
-        static::assertSame($expected['binary'], $musly->getBinary());
-        static::assertSame($expected['collection']->getPathname(), $musly->getCollection()->getPathname());
+        self::assertSame($expected['binary'], $musly->getBinary());
+        self::assertSame($expected['collection']->getPathname(), $musly->getCollection()->getPathname());
     }
 
-    public function dataCreateSuccess()
+    public function dataCreateSuccess(): array
     {
         $binary = uniqid('/path/to/musly', true);
         $collection = $this->getCollectionMock([ 'initialized' => true ]);
@@ -40,7 +34,7 @@ class MuslyTest extends TestCase
 
         return [
             'create with default params' => [
-                null,
+                [],
                 [
                     'binary' => Musly::DEFAULT_BINARY,
                     'collection' => $collection,
@@ -82,11 +76,11 @@ class MuslyTest extends TestCase
         $musly->setBinary($params['binary']);
         $musly->setCollection($params['collection']);
 
-        static::assertSame($expected['binary'], $musly->getBinary());
-        static::assertSame($expected['collection'], $musly->getCollection());
+        self::assertSame($expected['binary'], $musly->getBinary());
+        self::assertSame($expected['collection'], $musly->getCollection());
     }
 
-    public function dataConfigureSuccess()
+    public function dataConfigureSuccess(): array
     {
         $binary = uniqid('/path/to/musly', true);
         $pathname = uniqid('/path/to/collection', true);
@@ -123,20 +117,20 @@ class MuslyTest extends TestCase
     {
         $musly = $this->getMockBuilder(Musly::class)
             ->setConstructorArgs([ [ 'binary' => $params['binary'] ] ])
-            ->setMethods([ 'runProcess' ])
+            ->onlyMethods([ 'runProcess' ])
             ->getMock();
 
-        $expectedTimes = $expected['commandline'] ? static::once() : static::never();
+        $expectedTimes = $expected['commandline'] ? self::once() : self::never();
 
         $musly
             ->expects($expectedTimes)
             ->method('runProcess')
             ->with($expected['commandline']);
 
-        static::assertSame($expected['result'], $musly->initializeCollection($params['collection']));
+        self::assertSame($expected['result'], $musly->initializeCollection($params['collection']));
     }
 
-    public function dataInitializeCollectionSuccess()
+    public function dataInitializeCollectionSuccess(): array
     {
         $binary = uniqid('/path/to/binary', true);
         $pathname = uniqid('/path/to/collection', true);
@@ -179,7 +173,7 @@ class MuslyTest extends TestCase
                     'collection' => $this->getCollectionMock([ 'pathname' => $pathname, 'similarityMethod' => 'mandelellis', 'jukeboxPathname' => $jukeboxPathname ])
                 ],
                 [
-                    // no change, jukebox is only used to calculate similarity
+                    // no change, the jukebox is only used to speed up the similarity calculation process
                     'commandline' => sprintf('%s -c "%s" -n "mandelellis"', $binary, $pathname),
                     'result' => true,
                 ]
@@ -206,12 +200,12 @@ class MuslyTest extends TestCase
             ->getMock();
 
         $musly = $this->getMockBuilder(Musly::class)
-            ->setMethods([ 'runProcess' ])
+            ->onlyMethods([ 'runProcess' ])
             ->getMock();
 
         $musly
             ->method('runProcess')
-            ->will(static::throwException(new ProcessFailedException($process)));
+            ->will(self::throwException(new ProcessFailedException($process)));
 
         $collection = $this->getCollectionMock([ 'initialized' => false ]);
 
@@ -233,11 +227,11 @@ class MuslyTest extends TestCase
 
         $musly = $this->getMockBuilder(Musly::class)
             ->setConstructorArgs([ [ 'binary' => $params['binary'], 'collection' => $params['collection'] ] ])
-            ->setMethods([ 'ensurePathname', 'runProcess' ])
+            ->onlyMethods([ 'ensurePathname', 'runProcess' ])
             ->getMock();
 
         $musly
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('runProcess')
             ->with($expected['commandline'])
             ->willReturn($process);
@@ -254,10 +248,10 @@ class MuslyTest extends TestCase
             $result[$track['result']]++;
         }
 
-        static::assertSame($expected['result'], $result);
+        self::assertSame($expected['result'], $result);
     }
 
-    public function dataAnalyzeSuccess()
+    public function dataAnalyzeSuccess(): array
     {
         $binary = uniqid('/path/to/binary', true);
         $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true) ]);
@@ -381,13 +375,13 @@ class MuslyTest extends TestCase
         $this->expectException($expected['exception']);
 
         $musly = $this->getMockBuilder(Musly::class)
-            ->setMethods($params['methods'])
+            ->onlyMethods($params['methods'])
             ->getMock();
 
         $musly
             ->expects($expected['times'])
             ->method('runProcess')
-            ->will(static::throwException(new ProcessFailedException($params['process'])));
+            ->will(self::throwException(new ProcessFailedException($params['process'])));
 
         $musly->analyze($params['pathname']);
     }
@@ -407,25 +401,25 @@ class MuslyTest extends TestCase
 
         $musly = $this->getMockBuilder(Musly::class)
             ->setConstructorArgs([ [ 'binary' => $params['binary'], 'collection' => $params['collection'] ] ])
-            ->setMethods([ 'ensureCollectionIsInitialized', 'ensurePathname', 'runProcess' ])
+            ->onlyMethods([ 'ensureCollectionIsInitialized', 'ensurePathname', 'runProcess' ])
             ->getMock();
 
         $musly
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('runProcess')
             ->with($expected['commandline'])
             ->willReturn($process);
 
         $tracks = $musly->getSimilarTracks($params['pathname'], $params['num']);
 
-        static::assertCount($expected['count'], $tracks);
+        self::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            static::assertSame($expected['keys'], array_keys($track));
+            self::assertSame($expected['keys'], array_keys($track));
         }
     }
 
-    public function dataGetSimilarTracksSuccess()
+    public function dataGetSimilarTracksSuccess(): array
     {
         $binary = uniqid('/path/to/binary', true);
         $pathname = uniqid('/path/to/file', true);
@@ -507,18 +501,18 @@ class MuslyTest extends TestCase
         $this->expectException($expected['exception']);
 
         $musly = $this->getMockBuilder(Musly::class)
-            ->setMethods($params['methods'])
+            ->onlyMethods($params['methods'])
             ->getMock();
 
         $musly
             ->expects($expected['times'])
             ->method('runProcess')
-            ->will(static::throwException(new ProcessFailedException($params['process'])));
+            ->will(self::throwException(new ProcessFailedException($params['process'])));
 
         $musly->getSimilarTracks($params['pathname']);
     }
 
-    public function dataFileNotFoundInCollectionExceptionError()
+    public function dataFileNotFoundInCollectionExceptionError(): array
     {
         $pathname = uniqid('/path/to/file-or-directory', true);
 
@@ -538,7 +532,7 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => static::once(),
+                    'times' => self::once(),
                     'exception' => FileNotFoundInCollectionException::class,
                 ]
             ],
@@ -560,25 +554,25 @@ class MuslyTest extends TestCase
 
         $musly = $this->getMockBuilder(Musly::class)
             ->setConstructorArgs([ [ 'binary' => $params['binary'], 'collection' => $params['collection'] ] ])
-            ->setMethods([ 'ensurePathname', 'runProcess' ])
+            ->onlyMethods([ 'ensurePathname', 'runProcess' ])
             ->getMock();
 
         $musly
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('runProcess')
             ->with($expected['commandline'])
             ->willReturn($process);
 
         $tracks = $musly->getAllTracks();
 
-        static::assertCount($expected['count'], $tracks);
+        self::assertCount($expected['count'], $tracks);
 
         foreach ($tracks as $track) {
-            static::assertSame($expected['keys'], array_keys($track));
+            self::assertSame($expected['keys'], array_keys($track));
         }
     }
 
-    public function dataGetAllTracks()
+    public function dataGetAllTracks(): array
     {
         $binary = uniqid('/path/to/binary', true);
         $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true) ]);
@@ -607,18 +601,18 @@ class MuslyTest extends TestCase
         $this->expectException($expected['exception']);
 
         $musly = $this->getMockBuilder(Musly::class)
-            ->setMethods($params['methods'])
+            ->onlyMethods($params['methods'])
             ->getMock();
 
         $musly
             ->expects($expected['times'])
             ->method('runProcess')
-            ->will(static::throwException(new ProcessFailedException($params['process'])));
+            ->will(self::throwException(new ProcessFailedException($params['process'])));
 
         $musly->getAllTracks();
     }
 
-    public function dataFileNotFoundError()
+    public function dataFileNotFoundError(): array
     {
         $pathname = uniqid('/path/to/file-or-directory', true);
 
@@ -634,14 +628,14 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => static::never(),
+                    'times' => self::never(),
                     'exception' => FileNotFoundException::class,
                 ]
             ],
         ];
     }
 
-    public function dataCommonErrors()
+    public function dataCommonErrors(): array
     {
         $pathname = uniqid('/path/to/file-or-directory', true);
 
@@ -657,7 +651,7 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => static::once(),
+                    'times' => self::once(),
                     'exception' => MuslyProcessFailedException::class,
                 ]
             ],
@@ -668,7 +662,7 @@ class MuslyTest extends TestCase
                     'pathname' => $pathname,
                 ],
                 [
-                    'times' => static::never(),
+                    'times' => self::never(),
                     'exception' => CollectionNotInitializedException::class,
                 ]
             ],
@@ -681,7 +675,7 @@ class MuslyTest extends TestCase
     {
         $collection = $this->getMockBuilder(Collection::class)
              ->setConstructorArgs([ $params ])
-             ->setMethods([ 'isInitialized' ])
+             ->onlyMethods([ 'isInitialized' ])
              ->getMock();
 
         if (isset($params['initialized'])) {
