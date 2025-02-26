@@ -70,7 +70,7 @@ class Musly
     }
 
     /**
-     * @param string $binary
+     * @param $binary
      * @return $this
      */
     public function setBinary($binary)
