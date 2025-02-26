@@ -68,7 +68,7 @@ class CollectionTest extends TestCase
                 [
                     'pathname' => 'custom-collection.musly',
                     'similarityMethod' => 'mandelellis',
-                    'jukeboxPathname' => 'custom-collection.jbox',
+                    'jukeboxPathname' => 'custom-collection.musly.jbox',
                 ]
             ],
             'create with custom params' => [
@@ -137,7 +137,7 @@ class CollectionTest extends TestCase
                 ],
                 [
                     'similarityMethod' => 'mandelellis',
-                    'jukeboxPathname' => 'collection.jbox',
+                    'jukeboxPathname' => 'collection.musly.jbox',
                 ]
             ],
             'configure by custom params' => [

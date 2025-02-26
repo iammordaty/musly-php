@@ -148,12 +148,10 @@ class Collection extends \SplFileInfo
             $path = $this->getPath() . DIRECTORY_SEPARATOR;
         }
 
-        $file = $this->getBasename('.' . $this->getExtension());
-
         return sprintf(
             '%s%s.%s',
             $path,
-            $file,
+            $this->getFilename(),
             self::DEFAULT_JUKEBOX_FILE_EXT
         );
     }
