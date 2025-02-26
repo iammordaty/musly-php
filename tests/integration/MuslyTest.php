@@ -20,7 +20,7 @@ class MuslyTest extends TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$binary = $_ENV['MUSLY_BINARY'] ?: trim((string) shell_exec('which musly'));
+        self::$binary = $_ENV['musly_binary'] ?: trim((string) shell_exec('which musly'));
     }
 
     public function setUp()
