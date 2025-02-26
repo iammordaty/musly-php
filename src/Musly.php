@@ -299,7 +299,7 @@ class Musly
         $tracks = [];
 
         foreach ($lines as $line) {
-            if ($withAttrs && preg_match_all('/([^:]+):\s([^,]*)(?:,\s)?/', $line, $matches)) {
+            if ($withAttrs && preg_match_all('/(\w+(?:-\w+)*): ([^:,]*(?:, [^:,]+)*)(?=, \w+|$)/', $line, $matches)) {
                 $tracks[] = array_combine($matches[1], $matches[2]);
 
                 continue;
