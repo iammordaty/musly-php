@@ -16,10 +16,14 @@ $ composer require iammordaty/musly-php
 
 ## Requirements
 
-* PHP 7.1
+* PHP 8.0
 * [Musly](https://github.com/dominikschnitzer/musly) with [commandline tool](http://www.musly.org/about.html)
 
-## Basic Usage
+You may also be interested in [iammordaty/musly](https://github.com/iammordaty/musly) fork,
+which allows you to get the distance between similar tracks (see [PR #51](https://github.com/dominikschnitzer/musly/pull/51)
+for more info).
+
+## Basic usage
 
 ```php
 use Musly\Musly;
@@ -32,7 +36,7 @@ $musly->analyze('/path/to/dir/or/track.mp3');
 $similarTracks = $musly->getSimilarTracks('/path/to/track.mp3');
 ```
 
-## Advanced Usage
+## Advanced usage
 
 ```php
 use Musly\Collection
@@ -78,10 +82,10 @@ See the `musly` commandline tool help for more information.
 
 ## Tests
 
-To execute the test suite, you'll need phpunit.
+Copy `phpunit.xml.dist` file to `phpunit.xml` and use [PHPUnit](https://phpunit.de) to run tests:
 
 ```bash
-$ phpunit
+$ ./vendor/bin/phpunit
 ```
 
 ## Further information
