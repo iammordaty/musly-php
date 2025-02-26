@@ -410,7 +410,7 @@ final class MuslyTest extends TestCase
             ->with($expected['commandline'])
             ->willReturn($process);
 
-        $tracks = $musly->getSimilarTracks($params['pathname'], $params['num']);
+        $tracks = $musly->getSimilarTracks($params['pathname'], $params['num'], $params['extraParams']);
 
         self::assertCount($expected['count'], $tracks);
 
@@ -427,6 +427,7 @@ final class MuslyTest extends TestCase
         $jukeboxPathname = uniqid('/path/to/jukebox', true);
         $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true) ]);
         $collectionWithJukebox = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true), 'jukeboxPathname' => $jukeboxPathname ]);
+        $extraParams = uniqid('-extra-params=', true);
 
         $baseDatasets = [
             'get similar tracks' => [
@@ -435,11 +436,12 @@ final class MuslyTest extends TestCase
                     'collection' => $collection,
                     'pathname' => $pathname,
                     'num' => null,
+                    'extraParams' => null,
                 ],
                 [
                     'commandline' => sprintf('%s -c "%s" -p "%s" -k 5', $binary, $collection->getPathname(), $pathname),
                     'count' => 3,
-                    'keys' => [ 'track-id', 'track-similarity', 'track-origin' ],
+                    'keys' => [ 'track-id', 'track-distance', 'track-origin' ],
                 ]
             ],
             'get similar tracks with limit' => [
@@ -448,11 +450,26 @@ final class MuslyTest extends TestCase
                     'collection' => $collection,
                     'pathname' => $pathname,
                     'num' => $num,
+                    'extraParams' => null,
                 ],
                 [
                     'commandline' => sprintf('%s -c "%s" -p "%s" -k %d', $binary, $collection->getPathname(), $pathname, $num),
                     'count' => 3,
-                    'keys' => [ 'track-id', 'track-similarity', 'track-origin' ],
+                    'keys' => [ 'track-id', 'track-distance', 'track-origin' ],
+                ]
+            ],
+            'get similar tracks with extra params' => [
+                [
+                    'binary' => $binary,
+                    'collection' => $collection,
+                    'pathname' => $pathname,
+                    'num' => null,
+                    'extraParams' => $extraParams,
+                ],
+                [
+                    'commandline' => sprintf('%s -c "%s" -p "%s" -k 5 %s', $binary, $collection->getPathname(), $pathname, $extraParams),
+                    'count' => 3,
+                    'keys' => [ 'track-id', 'track-distance', 'track-origin' ],
                 ]
             ],
             'get similar tracks with jukebox' => [
@@ -461,11 +478,12 @@ final class MuslyTest extends TestCase
                     'collection' => $collectionWithJukebox,
                     'pathname' => $pathname,
                     'num' => $num,
+                    'extraParams' => null,
                 ],
                 [
                     'commandline' => sprintf('%s -c "%s" -p "%s" -k %d -j "%s"', $binary, $collectionWithJukebox->getPathname(), $pathname, $num, $collectionWithJukebox->getJukeboxPathname()),
                     'count' => 3,
-                    'keys' => [ 'track-id', 'track-similarity', 'track-origin' ],
+                    'keys' => [ 'track-id', 'track-distance', 'track-origin' ],
                 ]
             ],
         ];
@@ -487,6 +505,24 @@ final class MuslyTest extends TestCase
                 ];
             }
         }
+
+        $num = 1000;
+
+        $datasets['get similar tracks with limit from large collection'] = [
+            [
+                'binary' => $binary,
+                'collection' => $collection,
+                'pathname' => $pathname,
+                'num' => $num,
+                'stdout' => file_get_contents('./tests/unit/resources/get-similar-tracks-large-collection.stdout'),
+                'extraParams' => null,
+            ],
+            [
+                'commandline' => sprintf('%s -c "%s" -p "%s" -k %d', $binary, $collection, $pathname, $num),
+                'count' => $num,
+                'keys' => [ 'track-id', 'track-distance', 'track-origin' ],
+            ]
+        ];
 
         return $datasets;
     }
@@ -587,6 +623,18 @@ final class MuslyTest extends TestCase
                 [
                     'commandline' => sprintf('%s -c "%s" -l', $binary, $collection->getPathname()),
                     'count' => 5,
+                    'keys' => [ 'track-id', 'track-size', 'track-origin' ],
+                ]
+            ],
+            'get all tracks from large collection' => [
+                [
+                    'binary' => $binary,
+                    'collection' => $collection,
+                    'stdout' => file_get_contents('./tests/unit/resources/list-tracks-large-collection.stdout'),
+                ],
+                [
+                    'commandline' => sprintf('%s -c "%s" -l', $binary, $collection->getPathname()),
+                    'count' => 10000,
                     'keys' => [ 'track-id', 'track-size', 'track-origin' ],
                 ]
             ],

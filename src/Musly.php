@@ -182,13 +182,14 @@ class Musly
     /**
      * @param string $pathname
      * @param int|null $num
+     * @param string|null $extraParams
      * @return array
      *
      * @throws CollectionNotInitializedException
      * @throws FileNotFoundException
      * @throws MuslyProcessFailedException
      */
-    public function getSimilarTracks(string $pathname, ?int $num = null): array
+    public function getSimilarTracks(string $pathname, ?int $num = null, ?string $extraParams = null): array
     {
         $this->ensureCollectionIsInitialized($this->collection);
 
@@ -202,6 +203,10 @@ class Musly
             $num ?? self::DEFAULT_SIMILAR_TRACKS_NUM
         );
 
+        if ($extraParams) {
+            $commandline .= ' ' . $extraParams;
+        }
+
         if ($this->collection->getJukeboxPathname()) {
             $commandline .= sprintf(' -j "%s"', $this->collection->getJukeboxPathname());
         }
@@ -210,7 +215,7 @@ class Musly
             $process = $this->runProcess($commandline);
             $output = $process->getOutput();
 
-            return $this->extractListingResult($output);
+            return $this->extractListingResult($output, 24);
         } catch (ProcessFailedException $e) {
             if (stripos($e->getProcess()->getErrorOutput(), 'file not found') !== false) {
                 throw new FileNotFoundInCollectionException(
@@ -242,7 +247,7 @@ class Musly
             $process = $this->runProcess($commandline);
             $output = $process->getOutput();
 
-            return $this->extractListingResult($output);
+            return $this->extractListingResult($output, 21);
         } catch (ProcessFailedException $e) {
             throw new MuslyProcessFailedException($e->getProcess());
         }
@@ -271,9 +276,9 @@ class Musly
     protected function ensureCollectionIsInitialized(Collection $collection): void
     {
         if (!$collection->isInitialized()) {
-            throw new CollectionNotInitializedException(
-                sprintf('Collection "%s" is not initialized.', $collection->getPathname())
-            );
+            $message = sprintf('Collection "%s" is not initialized.', $collection->getPathname());
+
+            throw new CollectionNotInitializedException($message);
         }
     }
 
@@ -292,25 +297,23 @@ class Musly
 
     /**
      * @param string $output
+     * @param int $linesToSkip
      * @return array
      */
-    private function extractListingResult(string $output): array
+    private function extractListingResult(string $output, int $linesToSkip): array
     {
-        $matches = [];
-
-        preg_match(
-            '/(?!.*Computing the k=\d+ most similar tracks to)(?!.*Reading collection file):.+\n(.+?)/sU',
-            $output,
-            $matches
-        );
+        $lines = explode(PHP_EOL, trim($output));
+        $linesToSkipZeroBased = $linesToSkip - 1;
+        $withAttrs = strpos($output, 'track-id') !== false;
 
         $tracks = [];
 
-        $tracklist = trim($matches[1]);
-        $hasAttrs = strpos($tracklist, 'track-id') !== false;
+        foreach ($lines as $index => $line) {
+            if ($index <= $linesToSkipZeroBased) {
+                continue;
+            }
 
-        foreach (explode(PHP_EOL, $tracklist) as $line) {
-            if ($hasAttrs && preg_match_all('/([^:]+):\s([^,]*)(?:,\s)?/', $line, $matches)) {
+            if ($withAttrs && preg_match_all('/([^:]+):\s([^,]*)(?:,\s)?/', $line, $matches)) {
                 $tracks[] = array_combine($matches[1], $matches[2]);
 
                 continue;
@@ -318,7 +321,7 @@ class Musly
 
             $tracks[] = [
                 'track-id' => null,
-                'track-similarity' => null,
+                'track-distance' => null,
                 'track-origin' => $line,
             ];
         }
