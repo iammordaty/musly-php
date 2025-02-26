@@ -17,25 +17,25 @@ $ composer require iammordaty/musly-php
 ## Requirements
 
 * PHP 7.1
-* [Musly](https://github.com/dominikschnitzer/musly)
+* [Musly](https://github.com/dominikschnitzer/musly) with [commandline tool](http://www.musly.org/about.html)
 
 ## Basic Usage
 
 ```php
-use Musly\Musly;
+use \Musly\Musly;
 
 $musly = new Musly();
 $musly->initializeCollection();
 
-$musly->analyze('/path/to/dir/or/track');
+$musly->analyze('/path/to/dir/or/track.mp3');
 
-$similarTracks = $musly->getSimilarTracks('/path/to/track');
+$similarTracks = $musly->getSimilarTracks('/path/to/track.mp3');
 ```
 
 ## Advanced Usage
 
 ```php
-use Musly\{
+use \Musly\{
     Collection,
     Exception\FileNotFoundException,
     Exception\FileNotFoundInCollectionException,
@@ -86,13 +86,11 @@ To execute the test suite, you'll need phpunit.
 $ phpunit
 ```
 
-## Learn More
-
-Learn more at these links:
+## Further informations
 
 - [Musly website](http://www.musly.org/)
-- [`musly` commandline tool usage](http://www.musly.org/about.html)
 - [Musly repository](https://github.com/dominikschnitzer/musly)
+- [`musly` commandline tool usage](http://www.musly.org/about.html)
 
 ## License
 
