@@ -740,9 +740,9 @@ final class MuslyTest extends TestCase
     private function getCollectionMock($params = [])
     {
         $collection = $this->getMockBuilder(Collection::class)
-             ->setConstructorArgs([ $params ])
-             ->onlyMethods([ 'isInitialized' ])
-             ->getMock();
+            ->setConstructorArgs([ $params ])
+            ->onlyMethods([ 'isInitialized' ])
+            ->getMock();
 
         if (isset($params['initialized'])) {
             $collection
