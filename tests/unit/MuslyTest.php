@@ -33,9 +33,9 @@ class MuslyTest extends TestCase
 
     public function dataCreateSuccess()
     {
-        $binary = uniqid('/path/to/musly');
+        $binary = uniqid('/path/to/musly', true);
         $collection = $this->getCollectionMock([ 'initialized' => true ]);
-        $pathname = uniqid('/path/to/collection');
+        $pathname = uniqid('/path/to/collection', true);
         $customCollection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => $pathname ]);
 
         return [
@@ -88,8 +88,8 @@ class MuslyTest extends TestCase
 
     public function dataConfigureSuccess()
     {
-        $binary = uniqid('/path/to/musly');
-        $pathname = uniqid('/path/to/collection');
+        $binary = uniqid('/path/to/musly', true);
+        $pathname = uniqid('/path/to/collection', true);
         $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => $pathname ]);
 
         return [
@@ -138,9 +138,9 @@ class MuslyTest extends TestCase
 
     public function dataInitializeCollectionSuccess()
     {
-        $binary = uniqid('/path/to/binary');
-        $pathname = uniqid('/path/to/collection');
-        $jukeboxPathname = uniqid('/path/to/jukebox');
+        $binary = uniqid('/path/to/binary', true);
+        $pathname = uniqid('/path/to/collection', true);
+        $jukeboxPathname = uniqid('/path/to/jukebox', true);
 
         return [
             'initialize default collection' => [
@@ -259,11 +259,11 @@ class MuslyTest extends TestCase
 
     public function dataAnalyzeSuccess()
     {
-        $binary = uniqid('/path/to/binary');
-        $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection') ]);
-        $directory = uniqid('/path/to/directory/%s');
+        $binary = uniqid('/path/to/binary', true);
+        $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true) ]);
+        $directory = uniqid('/path/to/directory/%s', true);
         $directoryWithSlash = sprintf('%s/', $directory);
-        $ext = uniqid();
+        $ext = uniqid('', true);
         $extWithDot = sprintf('.%s', $ext);
 
         return [
@@ -427,12 +427,12 @@ class MuslyTest extends TestCase
 
     public function dataGetSimilarTracksSuccess()
     {
-        $binary = uniqid('/path/to/binary');
-        $pathname = uniqid('/path/to/file');
-        $num = rand(1, 100);
-        $jukeboxPathname = uniqid('/path/to/jukebox');
-        $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection') ]);
-        $collectionWithJukebox = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection'), 'jukeboxPathname' => $jukeboxPathname ]);
+        $binary = uniqid('/path/to/binary', true);
+        $pathname = uniqid('/path/to/file', true);
+        $num = random_int(1, 100);
+        $jukeboxPathname = uniqid('/path/to/jukebox', true);
+        $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true) ]);
+        $collectionWithJukebox = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true), 'jukeboxPathname' => $jukeboxPathname ]);
 
         $baseDatasets = [
             'get similar tracks' => [
@@ -485,7 +485,7 @@ class MuslyTest extends TestCase
 
         foreach ($outputs as $version => $output) {
             foreach ($baseDatasets as $baseName => $baseDataset) {
-                list($params, $expected) = $baseDataset;
+                [ $params, $expected ] = $baseDataset;
 
                 $datasets[sprintf('%s (%s)', $baseName, $version)] = [
                     array_merge([ 'stdout' => $output ], $params),
@@ -520,7 +520,7 @@ class MuslyTest extends TestCase
 
     public function dataFileNotFoundInCollectionExceptionError()
     {
-        $pathname = uniqid('/path/to/file-or-directory');
+        $pathname = uniqid('/path/to/file-or-directory', true);
 
         $process = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
@@ -580,8 +580,8 @@ class MuslyTest extends TestCase
 
     public function dataGetAllTracks()
     {
-        $binary = uniqid('/path/to/binary');
-        $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection') ]);
+        $binary = uniqid('/path/to/binary', true);
+        $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true) ]);
 
         return [
             'get all tracks from collection' => [
@@ -620,7 +620,7 @@ class MuslyTest extends TestCase
 
     public function dataFileNotFoundError()
     {
-        $pathname = uniqid('/path/to/file-or-directory');
+        $pathname = uniqid('/path/to/file-or-directory', true);
 
         $process = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()
@@ -643,7 +643,7 @@ class MuslyTest extends TestCase
 
     public function dataCommonErrors()
     {
-        $pathname = uniqid('/path/to/file-or-directory');
+        $pathname = uniqid('/path/to/file-or-directory', true);
 
         $process = $this->getMockBuilder(Process::class)
             ->disableOriginalConstructor()

@@ -9,17 +9,17 @@ class Collection extends \SplFileInfo
     /**
      * @var string
      */
-    const SIMILARITY_METHOD_MANDEL_ELLIS = 'mandelellis';
+    public const SIMILARITY_METHOD_MANDEL_ELLIS = 'mandelellis';
 
     /**
      * @var string
      */
-    const SIMILARITY_METHOD_TIMBRE = 'timbre';
+    public const SIMILARITY_METHOD_TIMBRE = 'timbre';
 
     /**
      * @var string[]
      */
-    const AVAILABLE_SIMILARITY_METHODS = [
+    public const AVAILABLE_SIMILARITY_METHODS = [
         self::SIMILARITY_METHOD_MANDEL_ELLIS,
         self::SIMILARITY_METHOD_TIMBRE,
     ];
@@ -27,27 +27,27 @@ class Collection extends \SplFileInfo
     /**
      * @var string
      */
-    const DEFAULT_PATHNAME = 'collection.musly';
+    public const DEFAULT_PATHNAME = 'collection.musly';
 
     /**
      * @var string
      */
-    const USE_DEFAULT_JUKEBOX_PATHNAME = '%COLL%.jbox';
+    public const USE_DEFAULT_JUKEBOX_PATHNAME = '%COLL%.jbox';
 
     /**
      * @var string
      */
-    const DEFAULT_JUKEBOX_FILE_EXT = 'jbox';
+    public const DEFAULT_JUKEBOX_FILE_EXT = 'jbox';
 
     /**
      * @var string|null
      */
-    private $similarityMethod = null;
+    private $similarityMethod;
 
     /**
      * @var string|null
      */
-    private $jukeboxPathname = null;
+    private $jukeboxPathname;
 
     /**
      * @param array|string $params
