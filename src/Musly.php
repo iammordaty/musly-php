@@ -254,7 +254,10 @@ class Musly
     protected function runProcess(string $commandline): Process
     {
         $process = Process::fromShellCommandline($commandline);
-        $process->mustRun();
+        $process
+            ->setIdleTimeout(null)
+            ->setTimeout(null)
+            ->mustRun();
 
         return $process;
     }
