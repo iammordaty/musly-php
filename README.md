@@ -1,6 +1,6 @@
 # iammordaty/musly-php
 
-musly-php is simple PHP wrapper around the `musly` commandline tool.
+musly-php is a simple PHP wrapper around the `musly` command-line tool.
 
 > Musly is a fast and high-quality audio music similarity library written in C/C++.
 >
@@ -8,7 +8,7 @@ musly-php is simple PHP wrapper around the `musly` commandline tool.
 
 ## Installation
 
-It's recommended that you use Composer to install musly-php.
+It is recommended to install musly-php via Composer.
 
 ```bash
 $ composer require iammordaty/musly-php
@@ -17,11 +17,11 @@ $ composer require iammordaty/musly-php
 ## Requirements
 
 * PHP 8.0
-* [Musly](https://github.com/dominikschnitzer/musly) with [commandline tool](http://www.musly.org/about.html)
+* [Musly](https://github.com/dominikschnitzer/musly) with the [command-line tool](http://www.musly.org/about.html)
 
 You may also be interested in [iammordaty/musly](https://github.com/iammordaty/musly) fork,
-which allows you to get the distance between similar tracks (see [PR #51](https://github.com/dominikschnitzer/musly/pull/51)
-for more info).
+which allows you to calculate the distance between similar tracks (see [PR #51](https://github.com/dominikschnitzer/musly/pull/51)
+for more information).
 
 ## Basic usage
 
@@ -39,10 +39,10 @@ $similarTracks = $musly->getSimilarTracks('/path/to/track.mp3');
 ## Advanced usage
 
 ```php
-use Musly\Collection
-use Musly\Exception\FileNotFoundException
-use Musly\Exception\FileNotFoundInCollectionException
-use Musly\Exception\MuslyProcessFailedException
+use Musly\Collection;
+use Musly\Exception\FileNotFoundException;
+use Musly\Exception\FileNotFoundInCollectionException;
+use Musly\Exception\MuslyProcessFailedException;
 use Musly\Musly;
 
 $collection = new Collection([
@@ -78,11 +78,11 @@ catch (MuslyProcessFailedException $e) {
 }
 ```
 
-See the `musly` commandline tool help for more information.
+See the `musly` command-line tool help for more information.
 
 ## Tests
 
-Copy `phpunit.xml.dist` file to `phpunit.xml` and use [PHPUnit](https://phpunit.de) to run tests:
+Copy the `phpunit.xml.dist` file to `phpunit.xml`, then use [PHPUnit](https://phpunit.de) to run the tests:
 
 ```bash
 $ ./vendor/bin/phpunit
@@ -92,7 +92,7 @@ $ ./vendor/bin/phpunit
 
 - [Musly website](http://www.musly.org/)
 - [Musly repository](https://github.com/dominikschnitzer/musly)
-- [`musly` commandline tool usage](http://www.musly.org/about.html)
+- [`musly` command-line tool usage](http://www.musly.org/about.html)
 
 ## License
 
