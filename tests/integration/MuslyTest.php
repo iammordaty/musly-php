@@ -254,7 +254,7 @@ final class MuslyTest extends TestCase
         ];
     }
 
-    private static function clean()
+    private static function clean(): void
     {
         array_map('unlink', glob('./collection*'));
     }

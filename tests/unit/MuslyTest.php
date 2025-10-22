@@ -413,6 +413,50 @@ final class MuslyTest extends TestCase
         }
     }
 
+    public function testProcessRunsWithoutTimeoutLimits()
+    {
+        $binary = uniqid('/path/to/binary', true);
+        $pathname = uniqid('/path/to/file', true);
+        $collection = $this->getCollectionMock([ 'initialized' => true, 'pathname' => uniqid('/path/to/collection', true) ]);
+
+        $process = $this->getMockBuilder(Process::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([ 'setTimeout', 'setIdleTimeout', 'mustRun', 'getOutput' ])
+            ->getMock();
+
+        $process
+            ->expects(self::once())
+            ->method('setTimeout')
+            ->with(null)
+            ->willReturnSelf();
+
+        $process
+            ->expects(self::once())
+            ->method('setIdleTimeout')
+            ->with(null)
+            ->willReturnSelf();
+
+        $process
+            ->method('mustRun')
+            ->willReturnSelf();
+
+        $process
+            ->method('getOutput')
+            ->willReturn(file_get_contents('./tests/unit/resources/analyze-pathname.stdout'));
+
+        $musly = $this->getMockBuilder(Musly::class)
+            ->setConstructorArgs([['binary' => $binary, 'collection' => $collection]])
+            ->onlyMethods(['ensurePathname', 'createProcess'])
+            ->getMock();
+
+        $musly
+            ->expects(self::once())
+            ->method('createProcess')
+            ->willReturn($process);
+
+        $musly->analyze($pathname);
+    }
+
     public function dataGetSimilarTracksSuccess(): array
     {
         $binary = uniqid('/path/to/binary', true);
